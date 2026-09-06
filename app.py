@@ -549,141 +549,54 @@ elif st.session_state.page == "playing":
     else:
         ending_type = get_ending_type(stats["wealth"], stats["health"], stats["happiness"])
         ending = get_ending_info(ending_type, stats["wealth"], stats["health"], stats["happiness"])
-  # ========== 🔥 終局特效（最炸版） ==========
-        effect = ending["effect"]
+    # ========== 终局结算页面 ==========
+if st.session_state.page == "game_over":
+    stats = st.session_state.stats
+    ending = get_ending_info()
 
-        if effect == "champagne":
-            # 🎆 禮花 × 3 輪（Streamlit 限制最多連續觸發）
-            st.balloons()
-            
-            # 滿屏 Emoji 雨
-            st.markdown("""
-            <div style='text-align:center; margin: 5px 0;'>
-                <span style='font-size:52px; animation: bounce 0.5s infinite;'>🎆🍾🎇🥂🎉👑💎💰🏆</span>
-            </div>
-            <div style='text-align:center; margin: 5px 0;'>
-                <span style='font-size:42px;'>✨🌟⭐💫🔥💯🎊🏅💵</span>
-            </div>
-            """, unsafe_allow_html=True)
-            
-            # 金色大字 + 發光
-            st.markdown("""
-            <h1 style='text-align:center; color:#FFD700; 
-                text-shadow: 0 0 20px rgba(255,215,0,0.9), 0 0 40px rgba(255,215,0,0.6), 0 0 60px rgba(255,165,0,0.4);
-                font-size: 42px; font-weight: 900; letter-spacing: 3px; margin: 15px 0;'>
-                🎊 傳 奇 人 生 達 成 ！ 🎊
-            </h1>
-            <h3 style='text-align:center; color:#FFA500; text-shadow: 0 0 10px rgba(255,165,0,0.6);'>
-                👑 太平山頂為你加冕 👑
-            </h3>
-            """, unsafe_allow_html=True)
-            
-            # 金色閃光卡片
-            st.markdown("""
-            <style>
-            @keyframes goldPulse {
-                0% { box-shadow: 0 0 20px rgba(255,215,0,0.4); }
-                50% { box-shadow: 0 0 60px rgba(255,215,0,0.8), 0 0 100px rgba(255,215,0,0.3); }
-                100% { box-shadow: 0 0 20px rgba(255,215,0,0.4); }
-            }
-            .legend-card {
-                animation: goldPulse 2s infinite;
-                border-radius: 18px;
-            }
-            </style>
-            """, unsafe_allow_html=True)
+    # 根据结局类型放特效
+    if ending["type"] == "legend":
+        st.balloons()
+    elif ending["type"] == "tragic":
+        st.snow()
 
-        elif effect == "beach":
-            # 🏖️ 海島金色光效
-            st.markdown("""
-            <div style='text-align:center; margin: 10px 0;'>
-                <span style='font-size:56px;'>🏖️🌅🍹🌊🏝️🌺🌴☀️</span>
-            </div>
-            <h2 style='text-align:center; color:#22c55e; 
-                text-shadow: 0 0 15px rgba(34,197,94,0.6), 0 0 30px rgba(34,197,94,0.3);
-                font-size: 32px; font-weight: 800; margin: 10px 0;'>
-                🌴 人 生 贏 家 — 海 島 退 休 🌴
-            </h2>
-            <div style='text-align:center; margin: 5px 0;'>
-                <span style='font-size:36px;'>✈️🧳🕶️🍸🥥🌺</span>
-            </div>
-            """, unsafe_allow_html=True)
+    # 结局卡片（只渲染一次，放在最前面）
+    st.markdown(f"""
+    <div class="gold-card" style="border-color: {ending['color']}; box-shadow: 0 0 40px {ending['color']}60;">
+        <div class="sticker-icon" style="font-size:80px;">{ending['end_emoji']}</div>
+        <h2 style="color: {ending['color']}; margin-top: 15px;">{ending['tag_title']}</h2>
+        <p style="font-size:18px; color:#444;">{ending['description']}</p >
+    </div>
+    """, unsafe_allow_html=True)
 
-        elif effect == "sad":
-            # 💀 灰暗冷調 + 閃爍紅色
-            st.markdown("""
-            <div style='text-align:center; margin: 10px 0;'>
-                <span style='font-size:50px; filter: grayscale(100%);'>🏥💔⚰️🩸🪦</span>
-            </div>
-            <h2 style='text-align:center; color:#ef4444; 
-                text-shadow: 0 0 15px rgba(239,68,68,0.8);
-                font-size: 28px; font-weight: 800; margin: 10px 0;'>
-                💀 健 康 清 零 — 強 制 清 算 💀
-            </h2>
-            <div style='text-align:center; margin: 5px 0;'>
-                <span style='font-size:30px; filter: grayscale(80%);'>🌧️💧😵📉🚑</span>
-            </div>
-            """, unsafe_allow_html=True)
+    # 终局算账标题
+    st.header("🏆 終局算帳與深度人生圖鑑")
 
-        else:
-            # 普通結局 — 溫馨禮花
-            st.balloons()
-            st.markdown("""
-            <div style='text-align:center; margin: 10px 0;'>
-                <span style='font-size:44px;'>🎉✨🥂🌱☕</span>
-            </div>
-            <h3 style='text-align:center; color:#83c5be; 
-                text-shadow: 0 0 10px rgba(131,197,190,0.5);
-                font-size: 24px; font-weight: 700; margin: 10px 0;'>
-                🌱 踏 踏 實 實 過 一 生 🌱
-            </h3>
-              """, unsafe_allow_html=True)
+    # 提取三项核心数值
+    w, h, p = stats["wealth"], stats["health"], stats["happiness"]
 
-st.header("🏆 終局算帳與深度人生圖鑑")
-w, h, p = stats["wealth"], stats["health"], stats["happiness"]
+    # 数值总览卡片
+    st.markdown(f"""
+    <div class="gold-card">
+        <h3>📊 人生三大维度</h3>
+        <p>💰 財富指數：{w}　　❤️ 健康指數：{h}　　😊 幸福指數：{p}</p >
+    </div>
+    """, unsafe_allow_html=True)
 
-        st.markdown(f"""
-        <div class="gold-card" style="border-color: {ending['color']}; box-shadow: 0 0 40px {ending['color']}60;">
-            <div class="sticker-icon" style="font-size:80px;">{ending['end_emoji']}</div>
-            <h2 style="color: {ending['color']}; margin-top: 15px;">{ending['tag_title']}</h2>
-        </div>
-        """, unsafe_allow_html=True)
+    # 人生图鉴评语
+    st.markdown(f"""
+    <div class="gold-card">
+        <h3>📜 人生圖鑑評語</h3>
+        <p>{ending['life_comment']}</p >
+    </div>
+    """, unsafe_allow_html=True)
 
-        st.markdown("### 📜 人生深度判詞")
-        st.markdown(ending["poem"])
-        st.write("")
-
-        # 柱狀圖
-        st.markdown("### 📊 終局數據分析")
-        df = pd.DataFrame({
-            "屬性": ["財富值 💰", "健康值 ❤️", "幸福度 😊"],
-            "數值": [w, h, p]
-        })
-        chart = alt.Chart(df).mark_bar(color=ending['color']).encode(
-            x=alt.X('屬性:N', axis=alt.Axis(labelAngle=0, title=None, labelFontSize=14)),
-            y=alt.Y('數值:Q', scale=alt.Scale(domain=[0, 100]), axis=alt.Axis(title="數值")),
-            tooltip=['屬性', '數值']
-        ).properties(height=300)
-        st.altair_chart(chart, use_container_width=True)
-
-        st.markdown(f"**💬 處世名言**：{ending['motto']}")
-
-        st.markdown("---")
-        st.markdown("#### 🏷️ 解鎖的人生成就標籤")
-        if st.session_state.inventory:
-            tags_html = " ".join([f"`{tag}`" for tag in set(st.session_state.inventory)])
-            st.markdown(tags_html)
-        else:
-            st.caption("未獲得特殊標籤")
-
-        st.markdown("---")
-        st.markdown("#### 📜 人生重要抉擇軌跡")
-        for idx, item in enumerate(st.session_state.log, 1):
-            st.caption(f"{idx}. {item}")
-
-        st.divider()
-        if st.button("🔄 重新重開人生", type="primary"):
-            restart_game()
+    # 重新开始按钮
+    st.markdown("---")
+    if st.button("🔄 重新開啟財富之旅", use_container_width=True):
+        st.session_state.page = "intro"
+        st.session_state.stats = {"wealth": 50, "health": 50, "happiness": 50}
+        st.rerun()
 
 # ==================== 底部 ====================
 st.divider()
