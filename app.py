@@ -637,9 +637,10 @@ elif st.session_state.page == "playing":
                 font-size: 24px; font-weight: 700; margin: 10px 0;'>
                 🌱 踏 踏 實 實 過 一 生 🌱
             </h3>
-            """, unsafe_allow_html=True)
-  st.header("🏆 終局算帳與深度人生圖鑑")
-        w, h, p = stats["wealth"], stats["health"], stats["happiness"]
+              """, unsafe_allow_html=True)
+
+st.header("🏆 終局算帳與深度人生圖鑑")
+    w, h, p = stats["wealth"], stats["health"], stats["happiness"]
 
         st.markdown(f"""
         <div class="gold-card" style="border-color: {ending['color']}; box-shadow: 0 0 40px {ending['color']}60;">
