@@ -640,7 +640,7 @@ elif st.session_state.page == "playing":
               """, unsafe_allow_html=True)
 
 st.header("🏆 終局算帳與深度人生圖鑑")
-    w, h, p = stats["wealth"], stats["health"], stats["happiness"]
+w, h, p = stats["wealth"], stats["health"], stats["happiness"]
 
         st.markdown(f"""
         <div class="gold-card" style="border-color: {ending['color']}; box-shadow: 0 0 40px {ending['color']}60;">
