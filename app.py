@@ -549,19 +549,97 @@ elif st.session_state.page == "playing":
     else:
         ending_type = get_ending_type(stats["wealth"], stats["health"], stats["happiness"])
         ending = get_ending_info(ending_type, stats["wealth"], stats["health"], stats["happiness"])
+  # ========== 🔥 終局特效（最炸版） ==========
+        effect = ending["effect"]
 
-        # 特效
-        if ending["effect"] == "champagne":
+        if effect == "champagne":
+            # 🎆 禮花 × 3 輪（Streamlit 限制最多連續觸發）
             st.balloons()
-            st.markdown("<h2 style='text-align:center; color:#FFD700;'>🎆🍾🎆</h2>", unsafe_allow_html=True)
-        elif ending["effect"] == "beach":
-            st.markdown("<h2 style='text-align:center; color:#22c55e;'>🏖️🌅🍹🏖️</h2>", unsafe_allow_html=True)
-        elif ending["effect"] == "sad":
-            st.markdown("<h2 style='text-align:center; color:#ef4444;'>💔😔💧</h2>", unsafe_allow_html=True)
+            
+            # 滿屏 Emoji 雨
+            st.markdown("""
+            <div style='text-align:center; margin: 5px 0;'>
+                <span style='font-size:52px; animation: bounce 0.5s infinite;'>🎆🍾🎇🥂🎉👑💎💰🏆</span>
+            </div>
+            <div style='text-align:center; margin: 5px 0;'>
+                <span style='font-size:42px;'>✨🌟⭐💫🔥💯🎊🏅💵</span>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # 金色大字 + 發光
+            st.markdown("""
+            <h1 style='text-align:center; color:#FFD700; 
+                text-shadow: 0 0 20px rgba(255,215,0,0.9), 0 0 40px rgba(255,215,0,0.6), 0 0 60px rgba(255,165,0,0.4);
+                font-size: 42px; font-weight: 900; letter-spacing: 3px; margin: 15px 0;'>
+                🎊 傳 奇 人 生 達 成 ！ 🎊
+            </h1>
+            <h3 style='text-align:center; color:#FFA500; text-shadow: 0 0 10px rgba(255,165,0,0.6);'>
+                👑 太平山頂為你加冕 👑
+            </h3>
+            """, unsafe_allow_html=True)
+            
+            # 金色閃光卡片
+            st.markdown("""
+            <style>
+            @keyframes goldPulse {
+                0% { box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+                50% { box-shadow: 0 0 60px rgba(255,215,0,0.8), 0 0 100px rgba(255,215,0,0.3); }
+                100% { box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+            }
+            .legend-card {
+                animation: goldPulse 2s infinite;
+                border-radius: 18px;
+            }
+            </style>
+            """, unsafe_allow_html=True)
+
+        elif effect == "beach":
+            # 🏖️ 海島金色光效
+            st.markdown("""
+            <div style='text-align:center; margin: 10px 0;'>
+                <span style='font-size:56px;'>🏖️🌅🍹🌊🏝️🌺🌴☀️</span>
+            </div>
+            <h2 style='text-align:center; color:#22c55e; 
+                text-shadow: 0 0 15px rgba(34,197,94,0.6), 0 0 30px rgba(34,197,94,0.3);
+                font-size: 32px; font-weight: 800; margin: 10px 0;'>
+                🌴 人 生 贏 家 — 海 島 退 休 🌴
+            </h2>
+            <div style='text-align:center; margin: 5px 0;'>
+                <span style='font-size:36px;'>✈️🧳🕶️🍸🥥🌺</span>
+            </div>
+            """, unsafe_allow_html=True)
+
+        elif effect == "sad":
+            # 💀 灰暗冷調 + 閃爍紅色
+            st.markdown("""
+            <div style='text-align:center; margin: 10px 0;'>
+                <span style='font-size:50px; filter: grayscale(100%);'>🏥💔⚰️🩸🪦</span>
+            </div>
+            <h2 style='text-align:center; color:#ef4444; 
+                text-shadow: 0 0 15px rgba(239,68,68,0.8);
+                font-size: 28px; font-weight: 800; margin: 10px 0;'>
+                💀 健 康 清 零 — 強 制 清 算 💀
+            </h2>
+            <div style='text-align:center; margin: 5px 0;'>
+                <span style='font-size:30px; filter: grayscale(80%);'>🌧️💧😵📉🚑</span>
+            </div>
+            """, unsafe_allow_html=True)
+
         else:
+            # 普通結局 — 溫馨禮花
             st.balloons()
-
-        st.header("🏆 終局算帳與深度人生圖鑑")
+            st.markdown("""
+            <div style='text-align:center; margin: 10px 0;'>
+                <span style='font-size:44px;'>🎉✨🥂🌱☕</span>
+            </div>
+            <h3 style='text-align:center; color:#83c5be; 
+                text-shadow: 0 0 10px rgba(131,197,190,0.5);
+                font-size: 24px; font-weight: 700; margin: 10px 0;'>
+                🌱 踏 踏 實 實 過 一 生 🌱
+            </h3>
+            """, unsafe_allow_html=True)
+               st.snow()
+               st.header("🏆 終局算帳與深度人生圖鑑")
 
         w, h, p = stats["wealth"], stats["health"], stats["happiness"]
 
