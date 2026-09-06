@@ -368,27 +368,17 @@ else:
         st.divider()
         if st.button("🔄 重新重開人生", type="primary"):
             restart_game()
-# ==================== 底部自动二维码生成 ====================
+# --- 底部二维码展示 ---
 st.divider()
 st.markdown("<h3 style='text-align: center;'>📱 扫码手机游玩</h3>", unsafe_allow_html=True)
 
-# 自动获取当前部署后的真实 URL 地址
-try:
-    current_url = st.context.headers.get("referer", "https://share.streamlit.io")
-except Exception:
-    current_url = "https://share.streamlit.io"
+# 填入你刚才部署好的公网网址
+game_url = "https://hk-life-simulator.streamlit.app"
 
-qr = qrcode.QRCode(version=1, box_size=8, border=2)
-qr.add_data(current_url)
-qr.make(fit=True)
-img = qr.make_image(fill_color="black", back_color="white")
-
-buf = BytesIO()
-img.save(buf, format="PNG")
+# 使用第三方 API 一行代码生成二维码图片，绝对不会报错
+qr_api_url = f"https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={game_url}"
 
 c1, c2, c3 = st.columns([1, 1, 1])
 with c2:
-    st.image(buf.getvalue(), caption="手机扫码直接玩", width=180)
-
-
+    st.image(qr_api_url, caption="手机扫码直接玩", width=180)
         
